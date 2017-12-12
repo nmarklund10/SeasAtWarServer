@@ -1,0 +1,13 @@
+{
+  "name": "seas-at-war-server",
+  "version": "0.0.0",
+  "description": "SeasAtWarServer",
+  "main": "server.js",
+  "author": {
+    "name": "Neil"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.2"
+  }
+}
