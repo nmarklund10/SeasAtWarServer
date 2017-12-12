@@ -5,7 +5,7 @@ var server = require('http').Server(app);
 var port = process.env.port || 1337;
 
 server.listen(port, function() {
-    console.log("Listening...");
+    console.log("Listening on port " + port + "...");
 });
 
 var io = require('socket.io').listen(server);

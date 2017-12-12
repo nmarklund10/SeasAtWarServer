@@ -1,13 +1,21 @@
 {
-  "name": "seas-at-war-server",
-  "version": "0.0.0",
-  "description": "SeasAtWarServer",
+  "name": "SeasAtWarServer",
+  "version": "1.0.0",
+  "description": "Server for UWP version of my CSCE 315 Seas At War Web Project",
   "main": "server.js",
-  "author": {
-    "name": "Neil"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "dependencies": {
-    "express": "^4.14.0",
-    "socket.io": "^1.7.2"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmarklund10/SeasAtWarServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nmarklund10/SeasAtWarServer/issues"
+  },
+  "homepage": "https://github.com/nmarklund10/SeasAtWarServer#readme"
 }
