@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/nmarklund10/SeasAtWarServer/issues"
   },
-  "homepage": "https://github.com/nmarklund10/SeasAtWarServer#readme"
+  "homepage": "https://github.com/nmarklund10/SeasAtWarServer#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
