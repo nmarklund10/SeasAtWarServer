@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title> Seas at War </title>
+		<script src="/socket.io/socket.io.js"></script>
+		<link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
+		<link rel="stylesheet" type="text/css" href="style.css" media="screen" /> 
+		<script type="text/javascript" src="clientCode/supportingClasses.js"></script>
+		<script type="text/javascript" src="clientCode/ships.js"></script>
+		<script type="text/javascript" src="clientCode/setupWindows.js"></script>
+		<script type="text/javascript" src="clientCode/playWindow.js"></script>	
+        <script type="text/javascript" src="clientCode/main.js"></script>
+		<script type="text/javascript" src="clientCode/menu.js"></script>
+
+	</head>
+
+   
+	<body id="mainWindow" onresize="resizeGame()" onload="initialize()">
+		
+		<div id="mainMenu"> 
+				<button class="button1" onClick="hostGame()">
+					<span>Host Game</span>
+				</button>
+
+				<button class="button2" onClick="joinGame()">
+					<span>Join Game</span>
+				</button>
+
+				<button class="button3" onClick="instructions()">
+					<span>Instructions</span>
+				</button>
+
+				<button class="button4" onClick="credits()">
+					<span>Credits</span>
+				</button>
+		</div>
+		
+		<div id="hostGame"> 
+			<h1>Host Game Menu</h1>
+			<p></p>
+			<p id="sessionID"></p>
+			<p>
+				<button class="button3" onClick="backToMain('hostGame')">
+					<span> Back </span> 
+				</button>
+			</p>
+		</div>
+		
+		<div id="joinGame">
+			<h1>Join Game Menu</h1>
+			<table>
+				<tr>
+					 <td valign="top">
+						<label for="sessionID">Enter session ID:</label>
+					 </td>
+					 <td valign="top">
+						<input id="joinIDVar" type="text" maxlength="50" size="30">
+					 </td>
+					<td>
+						<button onClick="joinID()">
+							<span> Join Game </span>
+						</button>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span id="joinGameError"></span>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+			<p>
+				<button class = "button" onClick="backToMain('joinGame')">
+					<span> Back </span> 
+				</button>
+			</p>
+		</div>
+		
+		<div id="instructions">
+			<h1>Instructions Menu</h1>
+			
+			<p>
+			<button id="previousInstruction" class = "button" onClick="prevInstruction()">
+					<span> Previous </span>
+				</button>
+			</p>
+			<p>
+				<button id="nextInstruction" class = "button" onClick="nextInstruction()">
+					<span> Next </span>
+				</button>
+			</p>
+			
+			<img src = "images/Instructions/goal.jpg"   class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/setup.jpg"  class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/class2.jpg" class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/class3.jpg" class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/class4.jpg" class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/class5.jpg" class="instructImg" alt = "image could not be loaded" />
+ 			<img src = "images/Instructions/Slide7.jpg" class="instructImg" alt = "image could not be loaded" />
+			
+			<p>
+				<button class="button4" onClick="backToMain('instructions')">
+					<span> Back </span> 
+				</button>
+			</p>
+		</div>
+		
+		<div id="credits">
+			<h1>Credits Menu</h1>
+			<h2>Team gitRekt</h2>
+				<p>	Kameron Goodman </p>
+				<p>	Neil Marklund </p>
+				<p>	Jacob Hostler </p>
+				<p>	Caleb Edens </p>
+			<p>
+				<button class="button4" onClick="backToMain('credits')">
+					<span> Back </span> 
+				</button>
+			</p>
+		</div>
+		
+		<div id="buildAFleet">
+			<canvas id="buildCanvas"> Canvas is not supported by your browser.  </canvas>
+		
+				<button id="scramblerDes" class="gameButton buildButton" onClick="shipDetails('Scrambler', 0)">
+					<span> 1 </span> 
+				</button>
+				<button id="scannerDes"  class="gameButton buildButton" onClick="shipDetails('Scanner', 0)">
+					<span> 2 </span> 
+				</button>
+				<button id="submarineDes"  class="gameButton buildButton" onClick="shipDetails('Submarine', 1)">
+					<span> 3 </span> 
+				</button>
+				<button id="defenderDes"  class="gameButton buildButton" onClick="shipDetails('Defender', 1)">
+					<span> 4 </span> 
+				</button>
+				<button id="cruiserDes"  class="gameButton buildButton" onClick="shipDetails('Cruiser', 2)">
+					<span> 5 </span> 
+				</button>
+				<button id="carrierDes"  class="gameButton buildButton" onClick="shipDetails('Carrier', 2)">
+					<span> 6 </span> 
+				</button>
+				<button id="executionerDes"  class="gameButton buildButton" onClick="shipDetails('Executioner', 3)">
+					<span> 7 </span> 
+				</button>
+				<button id="artilleryDes"  class="gameButton buildButton" onClick="shipDetails('Artillery', 3)">
+					<span> 8 </span> 
+				</button>
+				
+				<button id="finishShipSelect" onclick="toPositionSelect()"> 
+					<span> Finish Ship Select! </span>
+				</button>
+				
+				<div class='shipDes'> 
+					Misleading Intelligence 
+					<ul>
+						<li>For the next 3 turns, the enemy will not know<br>whether they got a hit or miss.</li>
+						<li>Disables Enemy Scanner, Carrier and Cruiser<br>special attacks</li>
+						<li>Can only be used once per game</li>
+					</ul>
+				</div>
+
+				<div class='shipDes'> 
+					Tracer Rounds
+					<ul>
+						<li>Fires a normal shot to a target location. The area<br>around it will be highlighted and a message will tell<br>you how many ships are in that highlighted area</li>
+						<li>Does not work when radar is jammed</li>
+						<li>Can be used twice per game</li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'>
+					Dive! Dive!
+					<ul>
+						<li>The first time the submarine is hit, it will be moved<br>to a new location</li>
+						<li>On reposition, the submarine regains full health</li>
+						<li>PASSIVE EFFECT</li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'>
+					Sabotage!
+					<ul>
+						<li>The next shot the enemy makes, normal or special,<br>will be forced to miss</li>
+						<li>Fires a normal attack to target location</li>
+						<li>Two uses per game</li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'>
+					Counter Attack
+					<ul>
+						<li>The first time this ship is hit, the enemy ship that shot<br>it takes a hit of damage and is revealed</li>
+						<li>Does not work when radar is jammed.</li>
+						<li>PASSIVE EFFECT</li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'>
+					UAV
+					<ul>
+						<li>Reveals the position of an enemy ship tile</li>
+						<li>Does not work when radar is jammed</li>
+						<li>One use per game </li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'>
+					Killing Blow
+					<ul>
+						<li>Can be fired to a target location and if it hits a ship,<br>that ship is instantly killed</li>
+						<li>If fired on the highlighted area after the Scanner’s<br>ability, it will kill the smallest ship in that area</li>
+						<li>One use per game </li>
+					</ul>
+				</div>
+				
+				<div class='shipDes'> 
+					Barrage
+					<ul>
+						<li>Fires an attack in the shape of a 3 x 3 cross </li>
+						<li>One use per game </li>
+					</ul>
+				</div>
+		</div>
+		
+		<div id="positionFleet">
+
+			<canvas id="positionCanvas" tabindex='1'></canvas>
+			
+			<button id="finishFleet" onclick="startGameScreen()"> 
+					<span> Finish Fleet! </span>
+			</button>
+			
+			
+			<button id="up" class="gameButton shipMoveButton" onclick="console.log(positionWindow.moveAction('Up'))">
+				<span> &#8679; </span>
+			</button>
+			<button id="down" class="gameButton shipMoveButton" onclick="console.log(positionWindow.moveAction('Down'))">
+				<span> &#8681; </span>
+			</button>
+			<button id="left" class="gameButton shipMoveButton" onclick="console.log(positionWindow.moveAction('Left'))">
+				<span> &#8678; </span>
+			</button>
+			<button id="right" class="gameButton shipMoveButton" onclick="console.log(positionWindow.moveAction('Right'))">
+				<span> &#8680; </span>
+			</button>
+			<button id="rotate" class="gameButton shipMoveButton" onclick="console.log(positionWindow.moveAction('Rotate'))">
+				<span> Rotate </span>
+			</button>
+			
+			<button id="move2" class="gameButton shipSelectButton" onclick="positionWindow.drawSelectShip(0, true)">
+				<span> Class 2 </span>
+			</button>
+			<button id="move3" class="gameButton shipSelectButton" onclick="positionWindow.drawSelectShip(1, true)">
+				<span> Class 3 </span>
+			</button>
+			<button id="move4" class="gameButton shipSelectButton" onclick="positionWindow.drawSelectShip(2, true)">
+				<span> Class 4 </span>
+			</button>
+			<button id="move5" class="gameButton shipSelectButton" onclick="positionWindow.drawSelectShip(3, true)">
+				<span> Class 5 </span>
+			</button>
+			
+		</div>
+		
+		<div id="gameWindow">
+			<canvas id="gameCanvas" tabindex="1"></canvas>
+			
+			<button id="normalAttack" class="gameButton fireButton">
+				<span> Normal Attack </span>
+			</button>
+			<button id="specialAttack" class="gameButton fireButton">
+				<span> Special Attack </span>
+			</button>
+			<span id="timer"></span>
+			
+			<div id="des1" class='inGameShipDes'> 
+				Misleading Intelligence 
+				<ul>
+					<li>For the next 3 turns, the enemy will not know whether they<br>got a hit or miss.</li>
+					<li>Disables Enemy Scanner, Carrier and Cruiser special attacks</li>
+					<li>Can only be used once per game</li>
+				</ul>
+			</div>
+
+			<div id="des2" class='inGameShipDes'> 
+				Tracer Rounds
+				<ul>
+					<li>Fires a normal shot to a target location. The area around it<br>will be highlighted and a message will tell you how many<br>ships are in that highlighted area </li>
+					<li>Does not work when radar is jammed</li>
+					<li>Can be used twice per game</li>
+				</ul>
+			</div>
+			
+			<div id="des3" class='inGameShipDes'>
+				Dive! Dive!
+				<ul>
+					<li>The first time the submarine is hit, it will be moved to a new<br>location</li>
+					<li>On reposition, the submarine regains full health</li>
+					<li>PASSIVE EFFECT</li>
+				</ul>
+			</div>
+			
+			<div id="des4" class='inGameShipDes'>
+				Sabotage!
+				<ul>
+					<li>The next shot the enemy makes, normal or special, will be<br>forced to miss</li>
+					<li>Fires a normal attack to target location</li>
+					<li>Two uses per game</li>
+				</ul>
+			</div>
+			
+			<div id="des5" class='inGameShipDes'>
+				Counter Attack
+				<ul>
+					<li>The first time this ship is hit, the enemy ship that shot it takes<br>a hit of damage and is revealed </li>
+					<li>Does not work when radar is jammed.</li>
+					<li>PASSIVE EFFECT</li>
+				</ul>
+			</div>
+			
+			<div id="des6" class='inGameShipDes'>
+				UAV
+				<ul>
+					<li>Reveals the position of an enemy ship tile</li>
+					<li>Does not work when radar is jammed</li>
+					<li>One use per game </li>
+				</ul>
+			</div>
+			
+			<div id="des7" class='inGameShipDes'>
+				Killing Blow
+				<ul>
+					<li>Can be fired to a target location and if it hits a ship, that ship<br>is instantly killed</li>
+					<li>If fired on the highlighted area after the Scanner’s ability, it<br>will kill the smallest ship in that area</li>
+					<li>One use per game </li>
+				</ul>
+			</div>
+			
+			<div id="des8" class='inGameShipDes'> 
+				Barrage
+				<ul>
+					<li>Fires an attack in the shape of a 3 x 3 cross </li>
+					<li>One use per game </li>
+				</ul>
+			</div>
+			
+		</div>
+		
+		<div id="gameOverWin">
+			<p id="gameOverMessageWin"></p>
+			<img src="images/victory.png" style="width:600px; height:600px;">
+			<button class="button1" onclick="backToMain('gameOverWin')">
+				<span> Ok </span>
+			</button>
+		</div>
+		
+		<div id="gameOverLose">
+			<p id="gameOverMessageLose"></p>
+			<img src="images/logo.png" style="width:600px; height:600px;">
+			<button class="button1" onclick="backToMain('gameOverLose')">
+				<span> Ok </span>
+			</button>
+		</div>
+		
+		<div id="playerDisconnectMessage">
+			<p> Other player disconnected. </p>
+			<button class="button1" onclick="backToMain('playerDisconnectMessage')">
+				<span> Continue </span>
+			</button>
+		</div>
+		
+		<div id="serverDisconnectMessage">
+			<p> Lost connection to server. </p>
+		</div>
+			
+	</body>
+</html>

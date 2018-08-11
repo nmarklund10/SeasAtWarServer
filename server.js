@@ -2,11 +2,72 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
+var io = require('socket.io')(server);
+var fs = require('fs');
+var path = require('path');
 var port = process.env.PORT || 3000;
 
 server.listen(port, function() {
     console.log("Listening on port " + port + "...");
 });
+
+app.get('/', function(request, response){
+    console.log('request starting...');
+
+    var filePath = '.' + request.url;
+    if (filePath == './')
+        filePath = './index.html';
+	
+    var extname = path.extname(filePath);
+    var contentType = 'text/html';
+	//reading files
+    switch (extname) {
+        case '.js':
+            contentType = 'text/javascript';
+            break;
+        case '.css':
+            contentType = 'text/css';
+            break;
+        case '.json':
+            contentType = 'application/json';
+            break;
+        case '.png':
+            contentType = 'image/png';
+            break;      
+        case '.jpg':
+            contentType = 'image/jpg';
+            break;
+        case '.wav':
+            contentType = 'audio/wav';
+            break;
+		case '.svg':
+			contentType = 'image/svg+xml';
+			break;
+    }
+    fs.readFile(filePath, function(error, content) {
+        if (error) {
+            if(error.code == 'ENOENT'){
+                fs.readFile('./404.html', function(error, content) {
+                    response.writeHead(200, { 'Content-Type': contentType });
+                    response.end(content, 'utf-8');
+                });
+            }
+            else {
+                response.writeHead(500);
+                response.end('Sorry, check with the site admin for error: '+error.code+' ..\n');
+                response.end(); 
+            }
+        }
+        else {
+            response.writeHead(200, { 'Content-Type': contentType });
+            response.end(content, 'utf-8');
+        }
+    });
+});
+app.use('/clientCode', express.static(__dirname + '/clientCode'));
+app.use('/images', express.static(__dirname + '/images'));
+app.use('/sounds', express.static(__dirname + '/sounds'));
+app.use('/style.css', express.static(__dirname + '/style.css'));
 
 var io = require('socket.io').listen(server);
 
@@ -48,6 +109,11 @@ io.on('connection', function (socket) {
         }
         else {
             var visitorID = publicQueue.shift();
+			if (visitorID == playerID) {
+				publicQueue.push(playerID);
+				console.log('Player ' + playerID + ' added to public queue');
+				return;
+			}
             gameID = getGameID();
             games.set(gameID, new Game(playerID, visitorID));
             socket.emit(playerID + ' join success', gameID);
@@ -70,7 +136,11 @@ io.on('connection', function (socket) {
     });
 
     socket.on('join private game', function (data) {
-        var obj = JSON.parse(data);
+        var obj = data
+        try {
+            obj = JSON.parse(obj);
+        }
+        catch (e) {}
         if (!games.has(obj.gameID)) {
             console.log('Player ' + obj.playerID + ' tried to join Game ' + obj.gameID + ' but had join error');
             socket.emit('join error', {});
@@ -102,7 +172,11 @@ io.on('connection', function (socket) {
     //when player has finished their fleet selection and positioning, set the player as ready
     //if both players are ready, start the game
     socket.on('fleet finished', function (data) {
-        var obj = JSON.parse(data);
+        var obj = data
+        try {
+            obj = JSON.parse(obj);
+        }
+        catch (e) {}
         if (obj.playerID == games.get(obj.gameID).host) {
             if (games.get(obj.gameID).hostReady != true) {
                 console.log('Player ' + obj.playerID + ' (host) ready on game ' + obj.gameID + '.');
@@ -117,7 +191,8 @@ io.on('connection', function (socket) {
         }
         if (games.get(obj.gameID).visitorReady && games.get(obj.gameID).hostReady) {
             var firstPlayer = games.get(obj.gameID).host;
-            if (getRandomInt(0, 1) == 1) {
+			var randomInt = Math.floor(Math.random() * 2);
+            if (randomInt == 1) {
                 firstPlayer = games.get(obj.gameID).visitor;
             }
             io.sockets.emit(obj.gameID + ' ready', firstPlayer);
@@ -133,54 +208,82 @@ io.on('connection', function (socket) {
     });
 
     //records the player's attack, sends an attack event to the other player in the game
-    socket.on('turn done', function (attackData) {
-        console.log(attackData);
-        var gameID = attackData.gID;
+    socket.on('turn done', function (data) {
+		var attackData = data
+        try {
+            attackData = JSON.parse(attackData);
+        }
+        catch (e) {}
+        var gameID = attackData.gameID;
         var currentGame = games.get(gameID);
         var recipientID = currentGame.host;
         if (attackData.playerID == currentGame.host) {
             recipientID = currentGame.visitor;
         }
-        io.sockets.emit(recipientID + ' attack made', attackData);
+        io.sockets.emit(recipientID + ' attack made', data);
     });
 
     //sends the updated Tile information from the attack back to the attacking player, so they
     //redraw their screen appropriately
-    socket.on('game updated', function (updateData) {
-        var gameID = updateData.gID;
+    socket.on('game updated', function (data) {
+		var updateData = data
+        try {
+            updateData = JSON.parse(updateData);
+        }
+        catch (e) {}
+        var gameID = updateData.gameID;
         var currentGame = games.get(gameID);
         var recipientID = currentGame.host;
         if (updateData.playerID == currentGame.host) {
             recipientID = currentGame.visitor;
         }
         console.log(recipientID + ' update made');
-        io.sockets.emit(recipientID + ' make update', updateData);
+        io.sockets.emit(recipientID + ' make update', data);
     });
 
     //when the game is over, delete it 
     socket.on('game over', function (data) {
-        var gameID = data.gID;
+		var overData = data
+        try {
+            overData = JSON.parse(overData);
+        }
+        catch (e) {}
+        var gameID = overData.gameID;
         var currentGame = games.get(gameID);
         var recipientID = currentGame.host;
-        if (data.playerID == currentGame.host) {
+        if (overData.playerID == currentGame.host) {
             recipientID = currentGame.visitor;
         }
         console.log('Game ' + gameID + ' is over');
         games.delete(gameID);
-        io.sockets.emit(recipientID + 'end game', {});
+        io.sockets.emit(recipientID + ' end game', {});
     });
 
     //ends the game on a player disconnect
     socket.on('disconnect', function () {
-        var index = players.indexOf(newID);
-        if (games.delete(gameID)) {
-            io.sockets.emit(gameID + ' player disconnect');
-            console.log('Game ' + gameID + ' deleted from records');
-        }
-        players.splice(index, 1);
-        console.log('Player ' + newID + ' deleted from records.');
-        console.log(players);
-        console.log(games);
+        var index = publicQueue.indexOf(newID);
+		if (newID > -1 && index > -1) {
+			if (index > -1) {
+				publicQueue.splice(index, 1);
+				console.log('Player ' + newID + ' removed from public queue');
+			}
+			if (games.delete(gameID)) {
+				io.sockets.emit(gameID + ' player disconnect');
+				console.log('Game ' + gameID + ' deleted from records');
+			}
+			var index = players.indexOf(newID);
+			players.splice(index, 1);
+			console.log('Player ' + newID + ' deleted from records.');
+			console.log('Players: ');
+			console.log(players);
+			console.log('Games: ');
+			console.log(games);
+			console.log('Public Queue ');
+			console.log(publicQueue);
+		}
+		else {
+			console.log('Something disconnected.');
+		}
     });
 });
 
@@ -199,12 +302,6 @@ function getGameID() {
         gameID += 1;
     return gameID;
 };
-
-//returns random integer in range [min, max]
-function getRandomInt(min, max) {
-    //http://stackoverflow.com/questions/1527803/generating-random-whole-numbers-in-javascript-in-a-specific-range
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
 class Game {
     constructor(hostID, visitorID) {

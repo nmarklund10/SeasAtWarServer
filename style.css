@@ -1,0 +1,352 @@
+*:focus {
+	outline: none !important;
+}
+
+html{
+	background-color: black;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+body {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+p:hover {
+	cursor: default !important;
+}
+h1:hover {
+	cursor: default !important;
+}
+h2:hover{
+	cursor: default !important;
+}
+
+*:disabled {
+	filter: sepia(60%) brightness(50%) !important;
+	border:3px solid #000000 !important;
+	cursor: default !important;
+	
+}
+*{
+	user-select: none;	
+}
+*:focus {
+	outline: none;
+}
+div {
+	position: absolute;
+	background-color: black;
+	background-repeat: no-repeat;
+	background-size: contain;
+	white-space: nowrap;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	text-shadow: 2px 2px #000000;
+}
+button {
+	border:3px solid #830220;
+	box-shadow: #878787 0px 2px 2px ;
+	border-radius: 14px;
+	font-size:53px;
+	font-family:arial black, sans-serif;
+	padding: 10px 20px 10px 20px; 
+	text-decoration:none; 
+	display: inline-block;
+	visibility: hidden;
+	white-space: nowrap;
+	text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+	font-weight:bold;
+	color: #FFFFFF;
+	background: -webkit-linear-gradient(top, #BA032D, #87001F);
+	cursor: pointer;
+	position: absolute;
+	z-index: 1;
+}
+button:hover:enabled {
+	background: -webkit-linear-gradient(top, #C91508 0%, #470000 75%, #470000 100%);
+}
+h5{
+	color: white;
+	font-family: Times New Roman;
+	font-size: 22px;
+	font-weight: bold;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	
+}
+.gameButton {
+	border:3px solid #000000;
+	background: -webkit-linear-gradient(top, #57606d, #000000);
+	
+}
+.gameButton:hover:enabled {
+	background: -webkit-linear-gradient(top, #B5B5B5 0%, #262526 75%, #262526 100%);
+}
+.button1 {
+	top: 20%;
+	left: 2%;	
+}
+.button2 {
+	top: 40%;
+	left: 2%;	
+}
+.button3 {
+	top: 60%;
+	left: 2%;	
+}
+.button4 {
+	top: 80%;
+	left: 2%;	
+}
+.button5 {
+	top: 20%;
+	left: 30%;
+}
+.buildButton {
+	font-size: 24px;
+	padding:0px 20px 0px 20px;
+}
+#normalAttack {
+	font-size: 20px;
+	padding: 22px 12px 22px 12px;
+	top: 785px;
+	left: 120px;
+}
+#specialAttack {
+	font-size: 20px;
+	padding: 22px 12px 22px 12px;
+	top: 910px;
+	left: 120px;
+}
+#timer{
+	font-size: 60px;
+	top: 400px;
+	left: 1220px;
+	color: white;
+	position: fixed;
+}
+#scramblerDes {
+	top: 190px;
+	left: 750px;
+}
+#scannerDes {
+	top: 280px;
+	left: 750px;
+}
+#submarineDes {
+	top: 400px;
+	left: 750px;
+}
+#defenderDes {
+	top: 490px;
+	left: 750px;
+}
+#cruiserDes {
+	top: 610px;
+	left: 750px;
+}
+#carrierDes {
+	top: 700px;
+	left: 750px;
+}
+#executionerDes {
+	top: 820px;
+	left: 750px;
+}
+#artilleryDes {
+	top: 910px;
+	left: 750px;
+}
+
+button span {
+	color: white;
+}
+
+#mainMenu {
+	position: absolute;
+	background-image: url("images/mainMenu.png");
+}
+
+#hostGame {
+	color: red;
+	background-image: url("images/hostMenu.png");
+}
+#sessionID {
+	font-size: 70px;
+}
+
+#joinGame {
+	background-image: url("images/joinMenu.png");
+	color: red;
+}
+
+#joinGame table {
+	font-size: 30px;
+}
+
+#joinGame table input {
+	font-size: 30px;
+	height: 30px;
+	width: 100px;
+}
+
+#joinGame table button{
+	position: static;
+	font-size:18px;
+	padding: 0px 20px 0px 20px;
+}
+
+#joinGameError {
+	font-size: 15px;
+}
+
+#sessionInput label {
+	font-size: 30px;
+}
+
+#instructions { 
+	color: red;
+}
+
+.instructImg {
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	margin: auto;
+	z-index: 0;
+}
+
+#nextInstruction {
+	position: absolute;
+	left: 20%;
+}
+
+#credits { 
+	color: red;
+	text-align: center;
+}
+
+#buildAFleet {
+	color: white;
+}
+#buildAFleet div{
+	width: 420px;
+	height: 210px;
+	word-wrap: break-word;
+	background-color: rgba(0,0,0,0);
+	top: 760px;
+	left: 70px;
+	font-size: 20px;
+	color: white;
+}
+
+#finishShipSelect {
+	top: 40px;
+	left: 1325px;
+	font-size: 30px;
+	padding: 10px 30px 10px 30px;
+}
+
+.shipSelectButton {
+	font-size: 24px;
+}
+
+.shipMoveButton {
+	font-size: 30px;
+}
+
+#finishFleet {
+	top: 795px;
+	left: 165px;
+	font-size: 30px;
+	padding: 20px 40px 20px 40px;
+}
+
+#up {
+	top: 675px;
+	left: 947px;
+	padding: 11px 26px 11px 26px;
+}
+
+#down {
+	top: 775px;
+	left: 947px;
+	font-size:29px;
+	padding: 11px 26px 11px 26px;
+}
+
+#left {
+	top: 775px;
+	left: 850px;
+}
+
+#right {
+	top: 775px;
+	left: 1050px;
+}
+
+#rotate {
+	padding: 20px 75px 20px 75px;
+	font-size: 21px;
+	top: 875px;
+	left: 850px;
+}
+
+#move2 {
+	top: 170px;
+	left: 750px; 
+}
+
+#move3 {
+	top: 300px;
+	left: 750px;
+}
+
+#move4 {
+	top: 430px;
+	left: 750px;
+}
+
+#move5 {
+	top: 560px;
+	left: 750px;
+}
+
+#playerDisconnectMessage {
+	color: red;
+	font-size: 30px;
+}
+
+#serverDisconnectMessage {
+	color: red;
+	font-size: 30px;
+}
+#gameOverWin {
+	color: gold;
+	font-size: 65px;
+	text-align: center;
+}
+#gameOverLose{
+	color: red;
+	font-size: 65px;
+	text-align: center;
+}
+.inGameShipDes{
+	max-width:650px;
+	height:320px;
+	top: 625px;
+	left: 780px;
+	color: white;
+	font-size:25px;
+	word-wrap: break-word;
+	background-color: rgba(0,0,0,0);
+}
