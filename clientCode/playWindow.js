@@ -92,7 +92,7 @@ class gameWindow {
 		document.getElementById('positionFleet').style.display = 'none';
 		document.getElementById('gameWindow').style.display = 'block';
 		this.drawButtons();
-		this.timerFunction = setInterval(this.drawTimer, 1000);
+		//this.timerFunction = setInterval(this.drawTimer, 1000);
 		if (client.fleet[0].shipName == 'Scrambler')
 			this.shipDescriptions[0] = document.getElementById('des1');
 		else
@@ -824,7 +824,7 @@ class gameWindow {
 			this.shipDescriptions[this.selectedShip].style.display = 'none';
 		norm.removeEventListener('click', this.buttonFunctions[0], false);
 		spec.removeEventListener('click', this.buttonFunctions[1], false);
-		clearInterval(this.timerFunction);
+		//clearInterval(this.timerFunction);
 		socket.off(client.id + ' attack made');
 		socket.off(client.id + 'end game');
 	}

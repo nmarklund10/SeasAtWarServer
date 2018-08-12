@@ -98,6 +98,9 @@ io.on('connection', function (socket) {
         socket.emit('private game created', gameID);
         console.log('Game ' + gameID + ' was created with host ' + hostID);
     });
+    socket.on('ping', function (data) {
+        console.log('ping');
+    });
 
     //if the client attempts to connect to a valid game id (and it is not full), add that player to the game
     //set the game to full so others may no longer join
@@ -262,7 +265,7 @@ io.on('connection', function (socket) {
     //ends the game on a player disconnect
     socket.on('disconnect', function () {
         var index = publicQueue.indexOf(newID);
-		if (newID > -1 && index > -1) {
+		if (newID > -1) {
 			if (index > -1) {
 				publicQueue.splice(index, 1);
 				console.log('Player ' + newID + ' removed from public queue');
