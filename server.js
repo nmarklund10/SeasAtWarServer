@@ -98,9 +98,7 @@ io.on('connection', function (socket) {
         socket.emit('private game created', gameID);
         console.log('Game ' + gameID + ' was created with host ' + hostID);
     });
-    socket.on('ping', function (data) {
-        console.log('ping');
-    });
+    socket.on('ping', function (data) {});
 
     //if the client attempts to connect to a valid game id (and it is not full), add that player to the game
     //set the game to full so others may no longer join
