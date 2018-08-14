@@ -12,8 +12,6 @@ server.listen(port, function() {
 });
 
 app.get('/', function(request, response){
-    console.log('request starting...');
-
     var filePath = '.' + request.url;
     if (filePath == './')
         filePath = './index.html';
